@@ -1,4 +1,4 @@
-from flask import Flask,render_template,request
+from flask import Flask,render_template,request,redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
@@ -40,9 +40,10 @@ def update():
 
 @app.route('/delete/<int:sno>')
 def delete(sno):
-    allTodo=Todo.query.all()
-    print(allTodo)
-    return 'This is product page'
+    todo=Todo.query.filter_by(sno=sno).first()
+    db.session.delete(todo)
+    db.session.commit()
+    return redirect("/")
 
 @app.route('/show')
 def products():
